@@ -88,7 +88,7 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
@@ -102,3 +102,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = ( os.path.join(BASE_DIR, "static"), )
+
+EMAIL_HOST = 'smtp.qq.com'
+EMAIL_HOST_USER = '124@qq.com'
+EMAIL_HOST_PASSWORD = 'gftufxjlzanrfgbe'
+EMAIL_PORT = 25
+EMAIL_USE_TLS = True
