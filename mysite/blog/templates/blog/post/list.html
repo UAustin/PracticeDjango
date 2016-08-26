@@ -8,6 +8,7 @@
 <h1>My Blog List</h1>
   {% for post in posts %}
   <h2><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
+  <p>Tags: {{ post.tags.all | join:"," }}</p>
   <p>Published {{ post.published }}by{{ post.author }}</p>
   {% endfor %}
   {% include 'blog/post/pagination.html' %}

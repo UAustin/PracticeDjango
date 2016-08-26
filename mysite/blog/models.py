@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from taggit.managers import TaggableManager
 
 class Post(models.Model):
     STATUS_CHOICE = (("draft", "DRAFT"), ("published", "PUBLISHED"),)
@@ -14,7 +15,8 @@ class Post(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICE, default="draft")
-
+    tags = TaggableManager()
+	
     def get_absolute_url(self):
         return reverse('blog:post_detail', args=[self.published.year, self.published.strftime('%m'), self.published.strftime('%d'), self.slug])
 
