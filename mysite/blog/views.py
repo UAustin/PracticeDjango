@@ -6,9 +6,15 @@ from .forms import EmailPostForm, CommentForm
 from .models import Post
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from taggit.models import Tag
 
-def post_list(request):
+def post_list(request, tag_slug=None):
     object_list = Post.objects.filter(status="published")
+    tag = None
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        object_list = object_list.filter(tags__in=[tag])
+		
     paginator = Paginator(object_list, 1)
     page = request.GET.get('page')
 
@@ -22,7 +28,7 @@ def post_list(request):
         current_page = paginator.page(paginator.num_pages)
         posts = current_page.object_list
 
-    return render(request, 'blog/post/list.html', {'posts':posts, "page":current_page})
+    return render(request, 'blog/post/list.html', {'posts':posts, "page":current_page, "tag": tag})
   
 def post_detail(request, year, month, day, post):
     #post = get_object_or_404(Post, id=post_id)
