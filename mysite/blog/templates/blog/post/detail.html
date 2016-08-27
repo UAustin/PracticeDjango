@@ -28,6 +28,13 @@
     {% endfor %}
 </div>
 <div>
+    {% for post in similar_posts %}
+    <p><a href="{{ post.get_absolute_url }}"> {{ post.title }}</a></p>
+    {% empty %}
+    <p>There is no similar post.</p>
+    {% endfor %}
+</div>
+<div>
     <h2>Add a new comment</h2>
     <form action="." method="post" class="form-horizontal">{% csrf_token %}
      <div class="form-group">
