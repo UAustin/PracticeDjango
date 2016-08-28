@@ -1,10 +1,13 @@
 {% extends "blog/base.html" %}
 
+{% load blog_tags %}
+
 {% block title %}
     Welcome to my Blog
 {% endblock%}
 
 {% block content %}
+<article class="col-xs-12 col-md-8">
 <h1>My Blog List</h1>
   {% if tag %}
       <h2>Posts tagged with "{{ tag.name }}"</h2>
@@ -21,4 +24,18 @@
   <p>Published {{ post.published }}by{{ post.author }}</p>
   {% endfor %}
   {% include 'blog/post/pagination.html' %}
+</article>
+<aside class="col-xs-6 col-md-4">
+  <h3>My blogs</h3>
+  <p>I have written {% total_posts %} posts.</p>
+</aside>
+<h3>Latest Posts</h3>
+{% latest_posts 2 %}
+<h3>Most commented posts</h3>
+{% most_commented_posts as comments %}
+<ul>
+  {% for post in comments %}
+  <li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
+  {% endfor %}
+ </ul>
 {% endblock %}
