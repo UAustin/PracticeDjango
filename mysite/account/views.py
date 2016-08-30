@@ -20,4 +20,4 @@ def user_login(request):
 
 	if request.method == "GET":
 		form = LoginForm()
-	return render(reqeust, "account/login.html", {"form": form})
+	return render(request, "account/login.html", {"form": form})
