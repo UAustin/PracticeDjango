@@ -31,7 +31,6 @@ SITE_ID = 1
 # Application definition
 
 INSTALLED_APPS = (
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -42,6 +41,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.sitemaps',
     'account',
+    'django.contrib.admin',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -112,3 +112,5 @@ EMAIL_HOST_USER = '124@qq.com'
 EMAIL_HOST_PASSWORD = 'gftufxjlzanrfgbe'
 EMAIL_PORT = 25
 EMAIL_USE_TLS = True
+
+LOGIN_REDIRECT_URL = '/blog/'
