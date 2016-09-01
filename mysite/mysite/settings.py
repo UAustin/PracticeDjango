@@ -114,3 +114,6 @@ EMAIL_PORT = 25
 EMAIL_USE_TLS = True
 
 LOGIN_REDIRECT_URL = '/blog/'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')

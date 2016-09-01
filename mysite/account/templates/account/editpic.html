@@ -1,0 +1,149 @@
+{% extends "account/base.html" %}
+{% load staticfiles %}
+
+{% block title %}Edit account{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" />
+
+  <h1>Hi, <span style="color:gray">{{ request.user }}</span>, Edit your account</h1>
+  <p>You can edit your account using the following form:</p>
+  <form class="form-horizontal">
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-md-8">
+        <div class="form-group">
+          <label for="{{ user_form.first_name.id_for_label }}" class="col-sm-2 control-label">First Name</label>
+          <div class="col-sm-10">{{ user_form.first_name }}</div>
+        </div>
+        <div class="form-group">
+          <label for="{{ user_form.last_name.id_for_label }}" class="col-sm-2 control-label">Last Name</label>
+          <div class="col-sm-10">{{ user_form.last_name }}</div>
+        </div>
+        <div class="form-group">
+          <label for="{{ profile_form.email.id_for_label }}" class="col-sm-2 control-label">Email</label>
+          <div class="col-sm-10">{{ user_form.email }}</div>
+        </div>
+        <div class="form-group">
+          <label for="{{ profile_form.phone.id_for_label }}" class="col-sm-2 control-label">Phone</label>
+          <div class="col-sm-10">{{ profile_form.phone }}</div>
+        </div>
+        <div class="form-group">
+          <label for="{{ profile_form.date_birth.id_for_label }}" class="col-sm-2 control-label">Date Birth</label>
+          <div class="col-sm-10">{{ profile_form.date_birth }}</div>
+        </div>
+        <div class="form-group text-center">
+          <input class="btn btn-default btn-lg" onclick="save_changes()" value='Save Changes'>
+        </div>
+
+      </div>
+
+      <div class="col-xs-6 col-md-4">
+
+        <div class="form-group text-center">
+            {% if profile_form.photo %}
+                <div><img name="user_face" src="{{ profile_form.photo | striptags }}" alt="..." class="img-circle" id="my_photo"></div>
+            {% else %}
+                <div><img name="user_face" src="{% static 'images/p.png' %}" alt="..." class="img-circle" id="my_photo"></div>
+            {% endif %}
+                <div style="margin-top:5px;"><button type="button" class="btn btn-primary btn-lg" id="upload_image" onclick="upload_image_layer()">upload my picture</button></div>
+        </div>
+    </div>
+  </div>
+</form>
+<script type="text/javascript" src='{% static "js/jquery.js" %}'></script>
+<script type="text/javascript" src='{% static "js/layer.js" %}'></script>
+<script type="text/javascript" src='{% static "js/cropbox-min.js" %}'></script>
+<script>
+// layer
+function upload_image_layer(){
+
+  var index=layer.open({
+    type: 1,
+    title: false,
+    closeBtn: 0,
+    shadeClose: true,
+    area: '650px',
+    success:function() {
+        var options =
+        {
+            thumbBox: '.crop_thumbBox',
+            spinner: '.crop_spinner',
+            imgSrc: ''
+        }
+        var cropper = $('.crop_imageBox').cropbox(options);
+        var img="";
+        $('#upload-file').on('change', function(){
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                options.imgSrc = e.target.result;
+                cropper = $('.crop_imageBox').cropbox(options);
+                //getImg();
+            }
+            reader.readAsDataURL(this.files[0]);
+            this.files = [];
+            getImg();
+        })
+
+        function getImg(){
+            img = cropper.getDataURL();
+            $('.crop_cropped').html('');
+            $('.crop_cropped').append('<img src="'+img+'" align="absmiddle" style="width:180px;margin-top:4px;border-radius:180px;box-shadow:0px 0px 12px #7E7E7E;"><p>180px*180px</p>');
+            $('.crop_cropped').append('<img src="'+img+'" align="absmiddle" style="width:128px;margin-top:4px;border-radius:128px;box-shadow:0px 0px 12px #7E7E7E;"><p>128px*128px</p>');
+            $('.crop_cropped').append('<img src="'+img+'" align="absmiddle" style="width:64px;margin-top:4px;border-radius:64px;box-shadow:0px 0px 12px #7E7E7E;" ><p>64px*64px</p>');
+            }
+
+        $(".crop_imageBox").on("mouseup",function(){
+            getImg();
+            });
+
+
+        $('#btnZoomIn').on('click', function(){
+            cropper.zoomIn();
+        });
+        $('#btnZoomOut').on('click', function(){
+            cropper.zoomOut();
+        });
+
+      $('#btnCrop').on('click', function(){
+       // alert("upload picture");
+           $.ajax({
+           	url: '{% url "account:upload_img" %}',
+           	type: "POST",
+           	data: {"img": img},
+           	success: function(e){
+           		if(e=="1"){
+           			layer.close(index);
+           			  $("#my_photo").attr("src", img);
+           		}
+           	},
+           });
+        })
+    },
+    content: '<div class="crop_container"><div class="crop_imageBox"><div class="crop_thumbBox"></div><div class="crop_spinner" style="display: none"></div></div>\
+    <div class="crop_action"><div class="crop_new-contentarea tc"> <a href="javascript:void(0)" class="upload-img"><label for="upload-file">请先选择图片...</label></a>\
+    <input type="file" class="" name="upload-file" id="upload-file" /></div><input type="button" id="btnCrop"  class="crop_Btnsty_peyton" value="OK">\
+    <input type="button" id="btnZoomIn" class="crop_Btnsty_peyton" value="+"  >\
+    <input type="button" id="btnZoomOut" class="crop_Btnsty_peyton" value="-" ></div><div class="crop_cropped"></div></div>',
+  });
+}
+function save_changes(){
+  var first_name = $("#id_first_name").val();
+  var last_name = $("#id_last_name").val();
+  var email = $("#id_email").val();
+  var phone = $("#id_phone").val();
+  var date_birth = $("#id_date_birth").val();
+  var save_data = {"first_name":first_name, "last_name":last_name, "email":email, "phone":phone, "date_birth":date_birth};
+  $.ajax({
+    url: "{% url 'account:edit' %}",
+    type: "POST",
+    data: save_data,
+    success: function(e){
+      if(e==1){
+        layer.msg("ok, you have change informations successfully!", {time:1000}, function(){location.href = '/blog/';});
+
+      }
+    },
+  });
+}
+</script>
+{% endblock %}
