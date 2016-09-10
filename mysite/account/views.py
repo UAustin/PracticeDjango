@@ -5,6 +5,7 @@ from .forms import LoginForm, UserRegistrationForm, UserEditForm, ProfileEditFor
 from .models import Profile 
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import User
 
 # Create your views here.
 def user_login(request):
@@ -39,28 +40,28 @@ def register(request):
 		user_form = UserRegistrationForm()
 	return render(request, "account/register.html", {"user_form":user_form})
 
-@login_required(login_url='/account/login/')
+@login_required(login_url="/account/login/")
+@csrf_exempt
 def edit(request):
-	if request.method == "POST":
-		user_user = User.objects.get(username=request.user)
-		user_profile = Profile.objects.get(user=request.user)
-		data = request.POST
-		user_user.first_name = data["first_name"]
-		user_user.last_name = data["last_name"]
-		user_user.email = data["email"]
-		type(user_user.email)
-		user_user.save()
-		user_profile.phone = data['phone']
-		user_profile.date_birth = data['date_birth']
+    if request.method == "POST":
+        user_user = User.objects.get(username=request.user)
+        user_profile = Profile.objects.get(user=request.user)
+        data = request.POST
+        user_user.first_name = data["first_name"]
+        user_user.last_name = data['last_name']
+        user_user.email = data['email']
+        type(user_user.email)
+        user_user.save()
+        user_profile.phone = data['phone']
+        user_profile.date_birth = data['date_birth']
 
-		user_profile.save()
-		return HttpResponse("1")
+        user_profile.save()
+        return HttpResponse("1")
 
-	if request.method == "GET":
-		user_form = UserEditForm(instance=request.user)
-		profile_form = ProfileEditForm(instance=request.user.profile)
-
-	return render(request, "account/editpic.html", {"profile_form":profile_form, "user_form":user_form})
+    if request.method == "GET":
+        user_form = UserEditForm(instance=request.user)
+        profile_form = ProfileEditForm(instance=request.user.profile)
+    return render(request, "account/editpic.html", {"profile_form":profile_form, "user_form":user_form})
 
 @login_required(login_url='/account/login/')
 @csrf_exempt

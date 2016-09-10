@@ -29,7 +29,7 @@ def post_list(request, tag_slug=None):
         current_page = paginator.page(paginator.num_pages)
         posts = current_page.object_list
 
-    return render(request, 'blog/post/list.html', {'posts':posts, "page":current_page, "tag": tag})
+    return render(request, 'blog/post/list.html', {"posts":posts, "page":current_page, "tag":tag})
   
 def post_detail(request, year, month, day, post):
     #post = get_object_or_404(Post, id=post_id)

@@ -1,0 +1,96 @@
+{% extends "images/base.html" %}
+
+{% load staticfiles %}
+
+{% block title %}My Image {% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/monsary-style.css' %}" type="text/css" />
+
+<div class="row">
+  <div class="col-md-4"><h1>Images</h1></div>
+  <div class="col-md-4"><button type="button" class="btn btn-default btn-lg" onclick="addNewPhoto()">New Photo</button></div>
+</div>
+
+<div class="container">
+<div id="my-gallery-container">
+  <!--div class="row"-->
+  {#% for image in images %#}
+  {% for image in request.user.images_created.all %}
+    <div class="fluid-item h200" data-order="{{image.id}}"><img src="http://{{request.get_host}}{{ image.get_absolute_url }}"></div>
+  {% endfor %}
+  <!--/div-->
+</div>
+</div>
+
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/mp.mansory.min.js' %}"></script>
+<script src="{% static 'js/layer.js' %}"></script>
+<script src="{% static 'js/csrf.js' %}"></script>
+
+<script type="text/javascript">
+        jQuery(document).ready(function ( $ ) {
+            $("#my-gallery-container").mpmansory(
+                {
+                    childrenClass: 'fluid-item', // default is a div
+                    columnClasses: 'fluid-padding', //add classes to items
+                    breakpoints:{
+                        lg: 3,
+                        md: 4,
+                        sm: 6,
+                        xs: 12
+                    },
+                    distributeBy: { order: false, height: false, attr: 'data-order', attrOrder: 'desc' }, //default distribute by order, options => order: true/false, height: true/false, attr => 'data-order', attrOrder=> 'asc'/'desc'
+                    onload: function (items) {
+                        //make somthing with items
+                    }
+                }
+            );
+        });
+
+    function addNewPhoto(){
+
+        var index=layer.open({
+          type: 1,
+          skin: 'layui-layer-demo',
+          closeBtn: 0,
+          shift: 2,
+          shadeClose: true,
+          title: "Add New Photo",
+          area: ['600px', '440px'],
+          content: "<div style='padding:20px'><p>请新增扩展名是.jpg或.png的网上照片地址</p><form><div class='form-group'><label for='phototitle' class='col-sm-2 control-label'>标题</label><div class='col-sm-10'><input id='phototitle' type='text' class='form-control' style='margin-bottom:5px'></div></div><div class='form-group'><label for='photourl' class='col-sm-2 control-label'>地址</label><div class='col-sm-10'><input id='photourl' style='margin-bottom:5px' type='text' class='form-control'></div></div><div class='form-group'><label for='description' class='col-sm-2 control-label'>描述</label><div class='col-sm-10'><textarea class='form-control' style='margin-bottom:5px' row='2' id='photodescription'></textarea></div></div><div class='form-group'><div class='col-sm-offset-2 col-sm-10'><input id='newphoto' type='button' class='btn btn-default' value='Add It'></div></div></form></div>",
+          success: function(){
+            $("#newphoto").on('click', function(){
+              var title = $("#phototitle").val();
+              var url = $("#photourl").val();
+              var description = $("#photodescription").val();
+              var photo = {"title":title, "url":url, "description":description};
+              $.ajax({
+                url: '{% url "images:upload_photo" %}',
+                type: "POST",
+                data: photo,
+                success: function(e){
+                  var status = e['status']
+                  if(status =="1"){
+                    layer.close(index);
+                    window.location.reload();
+                  } else {
+                    layer.msg("图片无法获取，请更换图片");
+                  }
+                },
+              });
+            });
+          },
+        });
+    }
+    </script>
+
+<!--div>
+  <form action="." method="post">
+    {{ form.as_p }}
+    {% csrf_token %}
+    <input type="submit" value="Get it">
+  </form>
+</div-->
+{% endblock %}

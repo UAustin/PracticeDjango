@@ -42,6 +42,8 @@ INSTALLED_APPS = (
     'django.contrib.sitemaps',
     'account',
     'django.contrib.admin',
+    'images',
+    'articles',
 )
 
 MIDDLEWARE_CLASSES = (
