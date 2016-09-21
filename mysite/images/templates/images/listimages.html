@@ -86,11 +86,10 @@
     }
     </script>
 
-<!--div>
+<div>
   <form action="." method="post">
-    {{ form.as_p }}
-    {% csrf_token %}
+    {{ form.as_p }}{% csrf_token %}
     <input type="submit" value="Get it">
   </form>
-</div-->
+</div>
 {% endblock %}

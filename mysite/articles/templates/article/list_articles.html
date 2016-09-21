@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Welcome to my Article
+{% endblock%}
+
+{% block content %}
+<article class="col-xs-12 col-md-8">
+<h1>My Article List</h1>
+  {% if tag %}
+      <h2>Article tagged with "{{ tag.name }}"</h2>
+  {% endif %}
+  {% for article in articles %}
+  <h2><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></h2>
+  <p>
+    Tags: 
+      {% for tag in article.tags.all %}
+	      <a href="{% url 'article:article_list_tag' tag.name %}">{{ tag.slug }}</a>
+	      {% if not forloop.last %}, {% endif %}
+	    {% endfor %}
+  </p>	  
+  <p>Published {{ article.published }} by {{ article.author }}</p>
+  {% endfor %}
+  {% include 'article/pagination.html' %}
+</article>
+<aside class="col-xs-6 col-md-4">
+  <h3>My Articles</h3>
+  <p>I have written {% article %} articles.</p>
+</aside>
+<h3>Latest Articles</h3>
+{% latest_articles 2 %}
+<h3>Most commented articles</h3>
+{% most_commented_articles as comments %}
+<ul>
+  {% for article in comments %}
+  <li><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></li>
+  {% endfor %}
+ </ul>
+{% endblock %}
