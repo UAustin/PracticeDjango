@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
 from .forms import ImageCreateForm
 from .models import Image
 
@@ -13,6 +14,7 @@ def list_images(request):
 
 @login_required(login_url='/account/login/')
 @require_POST
+@csrf_exempt
 def upload_photo(request):
     if request.method == "POST":
         form = ImageCreateForm(data=request.POST)
