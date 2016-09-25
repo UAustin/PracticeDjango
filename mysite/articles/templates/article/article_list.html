@@ -1,0 +1,14 @@
+{% extends "article/base.html" %}
+
+{% block title %}
+  My Article List
+{% endblock %}
+
+{% block content %}
+<article class="col-xs-12 col-md-8">
+<h1> My Article List</h1>
+  {% for article in articles %}
+  <h2><a href="{{ article.id }}">{{ article.title }}</a></h2>
+  <p>Created time {{ article.created_time }} by {{ article.user }}</p>
+  {% endfor %}
+{% endblock %}
