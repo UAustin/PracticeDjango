@@ -17,7 +17,7 @@
   <!--div class="row"-->
   {#% for image in images %#}
   {% for image in request.user.images_created.all %}
-    <div class="fluid-item h200" data-order="{{image.id}}"><img src="http://{{request.get_host}}{{ image.get_absolute_url }}"></div>
+    <div class="fluid-item h200" data-order="{{image.id}}"><img src="{{ image.get_absolute_url }}"></div>
   {% endfor %}
   <!--/div-->
 </div>

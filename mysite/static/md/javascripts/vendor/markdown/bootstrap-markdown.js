@@ -814,7 +814,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 xhr = null,
                 progress = this.$progress,
                 maxFileSize = this.$fileSize,
-                uploadImgURL = "",
+                uploadImgURL = "http://localhost:8000/media/{}",
                 uploadPanel = this.$uploadPanel,
                 inputFile = this.$inputFile,
                 _fileSize = 0,

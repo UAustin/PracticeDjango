@@ -30,7 +30,7 @@ urlpatterns = [
     url(r'^sitemap.xml/', sitemap, {'sitemaps': sitemaps }, name='django.contrib.sitemaps.views.sitemap'),
     url(r'^account/', include("account.urls", namespace="account", app_name="account")),
     url(r'^images/', include("images.urls", namespace="images")),
-    url(r'^articles/', include('articles.urls', namespace='articles')),
+    url(r'^articles/', include('articles.urls', namespace='articles',app_name='articles')),
 ]
 
 if settings.DEBUG:
