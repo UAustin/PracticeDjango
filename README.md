@@ -1,18 +1,6 @@
-## Django精髓MTV
-经过一个多月的学习与实践，慢慢熟悉Django web开发的流程。对于一个编程小白来说，学习Python基础知识+Django的实践，是进入编程世界最好的开始。
+## Django精髓MTV [点击查看小结](https://uaustin.github.io/2016/09/27/Django_sum/)
 
-先把Django的精髓MTV总结一个：
-
-|Web功能   |MVC架构的含义|MTV架构（Django)的含义|备注对比|
-|:-|:-|:-|:-:|
-|资料库互动与存取     |M=model= 模型 |M=model= 模型 |                      | 
-|Web架构与样式|V=view= 视图   |T=template= 模板 |Django的template才是呈现给使用者的页面|      
-|控制与整合|C=controller= 控制|V=view= 视图     |Django的view是控制与整合部分，需要细心理解，不要弄混了|
-
-当然，除了MTV,不要忘了url.py这个识别网址的工具。
-以上只是简单的总结MTV，要加深理解，是需要加强实践的,在以下三个非常好的学习网站可以体验MTV的精髓。
-
-目前经常光顾的Django网页：
+##目前经常光顾的Django网页：
 
 **[Django官网](https://www.djangoproject.com)**:学习Django必须要经常光顾的;
 
